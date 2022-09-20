@@ -3,8 +3,7 @@ import { FaSearch } from 'react-icons/fa';
 import Photo from './Photo';
 const mainUrl = `https://api.unsplash.com/photos/`;
 const searchUrl = `https://api.unsplash.com/search/photos/`;
-const clientID = `?client_id=4PuCKpfjGCvDHPjJ-d61vj9hoShTRi0USeVx4U2kO7I`;
-// const clientID = `?client_id=${process.env.REACT_APP_ACCESS_KEY}`;
+const clientID = `?client_id=${process.env.REACT_APP_ACCESS_KEY}`;
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -14,7 +13,7 @@ function App() {
   const [newImages, setNewImages] = useState(false);
   const mount = useRef(false);
 
-  const fetchPhotos = useCallback(async () => {
+  const fetchPhotos = async () => {
     setLoading(true);
     let url;
     if (query) {
@@ -42,11 +41,12 @@ function App() {
       setLoading(false);
     }
     // eslint-disable-next-line
-  }, [page]);
+  };
 
   useEffect(() => {
     fetchPhotos();
-  }, [fetchPhotos, page]);
+    // eslint-disable-next-line
+  }, [page]);
 
   useEffect(() => {
     if (!mount.current) {
@@ -56,7 +56,7 @@ function App() {
     if (!newImages) return;
     if (loading) return;
     setPage((prev) => prev + 1);
-  }, [newImages, loading]);
+  }, [newImages]);
 
   const event = () => {
     if (window.innerHeight + window.scrollY > document.body.scrollHeight - 3) {
@@ -68,19 +68,6 @@ function App() {
     window.addEventListener('scroll', event);
     return () => window.removeEventListener('scroll', event);
   }, []);
-
-  // useEffect(() => {
-  //   const event = window.addEventListener('scroll', () => {
-  //     if (
-  //       !loading &&
-  //       window.innerHeight + window.scrollY >= document.body.scrollHeight - 2
-  //     ) {
-  //       setPage((prevPage) => prevPage + 1);
-  //     }
-  //   });
-
-  //   return () => window.removeEventListener('scroll', event);
-  // }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
